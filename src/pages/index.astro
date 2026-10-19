@@ -1,0 +1,136 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { site, servicios, clientes, trabajos, numeros, waLink } from '../data/site';
+---
+<Layout>
+  <header>
+    <nav class="container nav">
+      <a href="#inicio" class="logo"><img src="/logo-lt.png" alt="LT" /><span>Estudio Contable</span></a>
+      <ul>
+        <li><a href="#servicios">Servicios</a></li>
+        <li><a href="#clientes">A quién ayudamos</a></li>
+        <li><a href="#trabajos">Trabajos</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+      </ul>
+      <a class="btn btn-wa" href={waLink('Hola, quisiera hacer una consulta.')} target="_blank" rel="noopener">WhatsApp</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="container hero-grid">
+        <img class="foto" src="/lourdes.jpg" alt={site.fundadora} width="340" height="340" />
+        <div>
+          <p class="eyebrow">Estudio contable e impositivo</p>
+          <h1>Ordenamos tus números para que <em>vos hagas crecer</em> tu negocio.</h1>
+          <p>{site.descripcion}</p>
+          <div class="actions">
+            <a class="btn btn-wa" href={waLink('Hola, quisiera hacer una consulta.')} target="_blank" rel="noopener">Consultar por WhatsApp</a>
+            <a class="btn btn-ghost" href="#servicios">Ver servicios</a>
+          </div>
+          <p class="firma">{site.fundadora}<br />{site.matricula}</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats">
+      <div class="container">
+        <div class="grid">
+          {numeros.map((n) => <div><strong>{n.valor}</strong><span>{n.etiqueta}</span></div>)}
+        </div>
+      </div>
+    </section>
+
+    <section id="servicios">
+      <div class="container">
+        <p class="eyebrow">Qué hacemos</p>
+        <h2 class="section-title">Servicios contables a tu medida</h2>
+        <p class="section-sub">Cubrimos todas las áreas contables, impositivas y laborales para que no tengas que preocuparte por nada.</p>
+        <div class="grid-cards">
+          {servicios.map((s) => (
+            <article class="card">
+              <div class="icon">{s.icono}</div>
+              <h3>{s.titulo}</h3>
+              <p>{s.texto}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="alt clientes" id="clientes">
+      <div class="container">
+        <p class="eyebrow">A quién ayudamos</p>
+        <h2 class="section-title">Trabajamos con todo tipo de clientes</h2>
+        <p class="section-sub">Desde quien recién comienza hasta empresas consolidadas.</p>
+        <div class="grid-cards">
+          {clientes.map((c) => (
+            <article class="card"><h3>{c.titulo}</h3><p>{c.texto}</p></article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section id="trabajos">
+      <div class="container">
+        <p class="eyebrow">Casos reales</p>
+        <h2 class="section-title">Trabajos realizados</h2>
+        <p class="section-sub">Algunos ejemplos de los resultados que logramos junto a nuestros clientes.</p>
+        <div class="grid-cards">
+          {trabajos.map((t) => (
+            <article class="card">
+              <span class="tag">{t.categoria}</span>
+              <h3>{t.titulo}</h3>
+              <p>{t.texto}</p>
+              <p class="result">✔ {t.resultado}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="contact" id="contacto">
+      <div class="container contact-wrap">
+        <div>
+          <p class="eyebrow">Contacto</p>
+          <h2 class="section-title">Hacé tu consulta por WhatsApp</h2>
+          <p class="section-sub">Completá el formulario y se abrirá WhatsApp con tu mensaje listo para enviar. Te respondemos a la brevedad.</p>
+          <ul class="info">
+            <li>📞 {site.telefono}</li>
+                        <li>📍 {site.direccion}</li>
+            <li>🕘 {site.horario}</li>
+          </ul>
+        </div>
+        <form id="wa-form" data-numero={site.whatsapp}>
+          <label>Nombre
+            <input name="nombre" required maxlength="80" placeholder="Tu nombre" />
+          </label>
+          <label>Motivo de la consulta
+            <select name="motivo">
+              {servicios.map((s) => <option>{s.titulo}</option>)}
+              <option>Otro</option>
+            </select>
+          </label>
+          <label>Mensaje
+            <textarea name="mensaje" rows="4" required maxlength="500" placeholder="Contanos brevemente qué necesitás"></textarea>
+          </label>
+          <button class="btn btn-wa" type="submit">Enviar por WhatsApp</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">© {new Date().getFullYear()} {site.nombre}. Todos los derechos reservados.</div>
+  </footer>
+
+  <script>
+    const form = document.getElementById('wa-form') as HTMLFormElement | null;
+    form?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const d = new FormData(form);
+      const texto = `Hola, soy ${d.get('nombre')}.\nConsulta sobre: ${d.get('motivo')}\n${d.get('mensaje')}`;
+      window.open(`https://wa.me/${form.dataset.numero}?text=${encodeURIComponent(texto)}`, '_blank', 'noopener');
+    });
+  </script>
+</Layout>
