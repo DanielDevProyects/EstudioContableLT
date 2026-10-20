@@ -6,13 +6,15 @@ import { site, servicios, clientes, trabajos, numeros, waLink } from '../data/si
   <header>
     <nav class="container nav">
       <a href="#inicio" class="logo"><img src="/logo-lt.png" alt="LT" /><span>Estudio Contable</span></a>
-      <ul>
+      <button class="menu-btn" id="menu-btn" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu">
+        <span></span><span></span><span></span>
+      </button>
+      <ul id="menu">
         <li><a href="#servicios">Servicios</a></li>
         <li><a href="#clientes">A quién ayudamos</a></li>
         <li><a href="#trabajos">Trabajos</a></li>
         <li><a href="#contacto">Contacto</a></li>
       </ul>
-      <a class="btn btn-wa" href={waLink('Hola, quisiera hacer una consulta.')} target="_blank" rel="noopener">WhatsApp</a>
     </nav>
   </header>
 
@@ -125,6 +127,14 @@ import { site, servicios, clientes, trabajos, numeros, waLink } from '../data/si
   </footer>
 
   <script>
+    const btn = document.getElementById('menu-btn');
+    const menu = document.getElementById('menu');
+    const toggle = (open: boolean) => {
+      menu?.classList.toggle('open', open);
+      btn?.setAttribute('aria-expanded', String(open));
+    };
+    btn?.addEventListener('click', () => toggle(!menu?.classList.contains('open')));
+    menu?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => toggle(false)));
     const form = document.getElementById('wa-form') as HTMLFormElement | null;
     form?.addEventListener('submit', (e) => {
       e.preventDefault();
